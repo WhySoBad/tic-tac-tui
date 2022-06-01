@@ -2,6 +2,8 @@
 #define TICTACTOE_BOARD_H
 
 #include "array"
+#include "../screen/ConsoleHelper.h"
+#include "Player.h"
 
 #define PLAYER_1        0
 #define PLAYER_2        1
@@ -10,7 +12,7 @@
 #define ROWS            3
 #define COLUMNS         3
 
-#define CELL_HEIGHT     2
+#define CELL_HEIGHT     3
 #define CELL_WIDTH      7
 #define CELL_CONTENT    5
 
@@ -63,21 +65,34 @@ public:
 
     void drawBoard();
 
-    [[nodiscard]] unsigned short getX() const;
+    /**
+     * Select a field
+     * @param id id of the field
+     * @param color color of the selection
+     */
 
-    [[nodiscard]] unsigned short getY() const;
+    void selectField(int id, const char * color = COLOR_RESET);
 
-    void setX(unsigned short x);
+    /**
+     * Get the currently selected field
+     * @return
+     */
 
-    void setY(unsigned short y);
+    [[nodiscard]] int getSelected() const;
+
+    /**
+     * Confirm a selected field
+     * @param player player to associate the field to
+     */
+
+    void confirmSelection(Player *player);
 
     Board();
 
 private:
     std::array<unsigned char, ROWS * COLUMNS> fields{};
-    unsigned short int x = 0;
-    unsigned short int y = 0;
     unsigned char winner = 2; // no winner
+    int selected = -1;
 
     /**
      * Check whether the game has a winner
@@ -85,6 +100,24 @@ private:
      */
 
     [[nodiscard]] unsigned char checkForWinner();
+
+    /**
+     * Fill a field
+     * @param id id of the field
+     * @param character character to fill the field with
+     * @param outlined boolean whether the field should be outlined
+     * @param color color of the fill
+     */
+
+    static void fillField(int id, const char * character, bool outlined, const char * color = COLOR_RESET);
+
+    /**
+     * Select a field
+     * @param id id of the field
+     * @param color color of the outline
+     */
+
+    static void highlightField(int id, const char * color = COLOR_RESET);
 };
 
 

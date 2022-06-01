@@ -14,13 +14,71 @@ class Game {
 public:
     void start();
 
+    /**
+     * Get the mode the game is running on
+     * @return mode the game is running on
+     */
+
+    [[nodiscard]] Gamemode getMode() const;
+
+    /**
+     * Get the board instance
+     * @return board instance
+     */
+
+    [[nodiscard]] Board *getBoard() const;
+
+    /**
+     * Get the first player
+     * @return first player
+     */
+
+    [[nodiscard]] Player *getFirstPlayer() const;
+
+    /**
+     * Get the second player
+     * @return second player
+     */
+
+    [[nodiscard]] Player *getSecondPlayer() const;
+
+    /**
+     * Get the active player
+     * @return active player
+     */
+
+    [[nodiscard]] Player *getActive() const;
+
+    /**
+     * Get whether the game is running or not
+     * @return boolean whether the game is running
+     */
+
+    [[nodiscard]] bool isRunning() const;
+
+    /**
+     * Stop the game
+     * @param restart boolean whether a new round should be started
+     */
+
+    void stop(bool restart = true);
+
+    /**
+     * Get whether a new round should be started after the game was stopped
+     * @return boolean whether a new round should be started after the game was stopped
+     */
+
+    bool shouldRestart() const;
+
     Game(Gamemode gamemode = SINGLEPLAYER);
 private:
     Gamemode mode;
-    Board* board;
-    Player* player1;
-    Player* player2;
-    Player* active = nullptr;
+    Board *board;
+    Player *player1;
+    Player *player2;
+    Player *active;
+    bool running = false;
+    bool restart = false;
 };
 
 
