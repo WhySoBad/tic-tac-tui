@@ -16,7 +16,8 @@ Position LinuxConsoleHelper::getCursorPosition() {
 
     tcgetattr(0, &term);
     tcgetattr(0, &restore);
-    term.c_lflag &= ~(ICANON|ECHO);
+    term.c_lflag &= ~ICANON;
+    term.c_lflag &= ~ECHO;
     tcsetattr(0, TCSANOW, &term);
 
     write(1, "\033[6n", 4);
@@ -50,8 +51,9 @@ void LinuxConsoleHelper::initialize() {
 }
 
 LinuxGameKey LinuxConsoleHelper::getKey() {
-    struct termios term = {0};
-    if(tcgetattr(0, &term) < 0) fprintf(stderr, "tcgetattr: error whilst getting attribute\n");
+    struct termios term{}, restore{};
+    tcgetattr(0, &term);
+    tcgetattr(0, &restore);
     term.c_lflag &= ~ICANON; // disable canonical input
     term.c_lflag &= ~ECHO; // disable echo
     term.c_cc[VMIN] = 1;
@@ -69,9 +71,18 @@ LinuxGameKey LinuxConsoleHelper::getKey() {
         } else if(buffer[0] == 27 && !buffer[1] && !buffer[2]) key = K_ESCAPE;
         else if(buffer[0] == 10 && !buffer[1] && !buffer[2]) key = K_ENTER;
     } while(key == K_NONE);
-    term.c_lflag |= ICANON;
-    term.c_lflag |= ECHO;
-    if(tcsetattr(0, TCSADRAIN, &term) < 0) fprintf(stderr, "tcsetattr: error whilst resetting ICANON flag\n");
+    tcsetattr(0, TCSADRAIN, &restore);
     return key;
 }
+
+void LinuxConsoleHelper::cleanup() {
+    struct termios term = {0};
+    tcgetattr(0, &term);
+    term.c_lflag |= ICANON; // enable canonical input
+    term.c_lflag |= ECHO; // disable echo
+    term.c_cc[VMIN] = 1;
+    term.c_cc[VTIME] = 0;
+    tcsetattr(0, TCSADRAIN, &term);
+}
+
 #endif

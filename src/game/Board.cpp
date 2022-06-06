@@ -55,7 +55,7 @@ unsigned char Board::checkForWinner() {
     for (int i = 0; i < COLUMNS; ++i) {
         for (int j = 0; j < ROWS; ++j) {
             if(j == 0) {
-                player = fields[i * COLUMNS];
+                player = fields[i];
                 if(player == UNOCCUPIED) break;
             }
             same = fields[i + ROWS * j] == player;
@@ -81,7 +81,7 @@ unsigned char Board::checkForWinner() {
         if(same) return player;
     }
 
-    player = fields[ROWS * COLUMNS - COLUMNS + 1];
+    player = fields[ROWS * COLUMNS - COLUMNS];
 
     // check for winner in ascending diagonal
     // 0 0 1
@@ -90,7 +90,7 @@ unsigned char Board::checkForWinner() {
 
     if(player != UNOCCUPIED) {
         for (int i = 1; i < ROWS; ++i) {
-            same = fields[ROWS * COLUMNS - COLUMNS + 1 - i * ROWS + i] == player;
+            same = fields[ROWS * COLUMNS - COLUMNS - i * ROWS + i] == player;
             if(!same) break;
         }
         if(same) return player;
@@ -108,7 +108,7 @@ void Board::drawBoard() {
     fflush(stdout);
 }
 
-void Board::fillField(int id, const char *character, bool outlined, const char *color) {
+void Board::fillField(int id, const char *character, bool outlined, ConsoleColor color) {
     int column = id % COLUMNS;
     int row = id / COLUMNS;
 
@@ -120,19 +120,19 @@ void Board::fillField(int id, const char *character, bool outlined, const char *
 
     for (int i = 0; i < CELL_HEIGHT; ++i) {
         ConsoleHelper::moveCursor(startX, startY + i);
-        std::cout << color;
+        ConsoleHelper::useColor(color);
         if(outlined && !(i == 0 || i == CELL_HEIGHT - 1)) {
             ConsoleHelper::print(character);
-            std::cout << COLOR_RESET;
+            ConsoleHelper::useColor(C_RESET);
             ConsoleHelper::moveCursor(startX + CELL_CONTENT - 1, startY + i);
-            std::cout << color;
+            ConsoleHelper::useColor(color);
             ConsoleHelper::print(character);
         } else for (int j = 0; j < CELL_CONTENT; ++j) ConsoleHelper::print(character);;
-        std::cout << COLOR_RESET;
+        ConsoleHelper::useColor(C_RESET);
     }
 }
 
-void Board::highlightField(int id, const char *color) {
+void Board::highlightField(int id, ConsoleColor color) {
     int column = id % COLUMNS;
     int row = id / COLUMNS;
 
@@ -147,7 +147,7 @@ void Board::highlightField(int id, const char *color) {
 
     ConsoleHelper::moveCursor(startX, startY);
     for (int i = 0; i < CELL_WIDTH + 2; ++i) {
-        std::cout << color;
+        ConsoleHelper::useColor(color);
         if(i == 0) {
             if(column == 0 && row == 0) ConsoleHelper::print(TOP_LEFT_CORNER);
             else if(column == 0) ConsoleHelper::print(LEFT_CROSSING_BORDER);
@@ -160,12 +160,12 @@ void Board::highlightField(int id, const char *color) {
             else ConsoleHelper::print(CROSSING_BORDER);
         } else if((i - 2) % CELL_WIDTH == 0) ConsoleHelper::print(fieldTop.c_str());
         else ConsoleHelper::print(HORIZONTAL_BORDER);
-        std::cout << COLOR_RESET;
+        ConsoleHelper::useColor(C_RESET);
     }
 
     ConsoleHelper::moveCursor(startX, startY + CELL_HEIGHT + 1);
     for (int i = 0; i < CELL_WIDTH + 2; ++i) {
-        std::cout << color;
+        ConsoleHelper::useColor(color);
         if(i == 0) {
             if(column == 0 && row == ROWS - 1) ConsoleHelper::print(BOTTOM_LEFT_CORNER);
             else if(column == 0) ConsoleHelper::print(LEFT_CROSSING_BORDER);
@@ -178,36 +178,42 @@ void Board::highlightField(int id, const char *color) {
             else ConsoleHelper::print(CROSSING_BORDER);
         } else if((i - 2) % CELL_WIDTH == 0) ConsoleHelper::print(fieldBottom.c_str());
         else ConsoleHelper::print(HORIZONTAL_BORDER);
-        std::cout << COLOR_RESET;
+        ConsoleHelper::useColor(C_RESET);
     }
 
     for (int i = 0; i < CELL_HEIGHT; ++i) {
         ConsoleHelper::moveCursor(startX, startY + 1 + i);
-        std::cout << color;
+        ConsoleHelper::useColor(color);
         ConsoleHelper::print(VERTICAL_BORDER);
-        std::cout << COLOR_RESET;
+        ConsoleHelper::useColor(C_RESET);
         ConsoleHelper::moveCursor(startX + CELL_WIDTH + 1, startY + 1 + i);
-        std::cout << color;
+        ConsoleHelper::useColor(color);
         ConsoleHelper::print(VERTICAL_BORDER);
-        std::cout << COLOR_RESET;
+        ConsoleHelper::useColor(C_RESET);
     }
 }
 
-void Board::selectField(int id, const char *color) {
-    if(selected >= 0) highlightField(selected);
+void Board::selectField(int id, ConsoleColor color, bool single) {
+    if(selected >= 0 && single) highlightField(selected);
     selected = id;
     if(selected < 0 || selected >= fields.size()) return;
-    highlightField(selected, color);
+    highlightField(selected, fields[selected] == UNOCCUPIED ? color : FG_BLACK);
 }
 
 void Board::confirmSelection(Player *player) {
     if(player->getId() != PLAYER_1 && player->getId() != PLAYER_2) return;
-    if(selected <= 0 || selected >= fields.size()) return;
+    if(selected < 0 || selected >= fields.size() || fields[selected] != 2) return;
     fields[selected] = player->getId();
+    winner = checkForWinner();
     fillField(selected, player->getCharacter(), player->isOutlined(), player->getColor());
-    selectField(-1);
+    selectField(selected);
 }
 
 int Board::getSelected() const {
     return selected;
+}
+
+bool Board::isBoardFull() const {
+    for (int i = 0; i < fields.size(); ++i) { if(fields[i] == 2) return false; }
+    return true;
 }

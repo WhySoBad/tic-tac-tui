@@ -6,8 +6,8 @@
 #include "Player.h"
 
 enum Gamemode {
-    LOCAL_MULTIPLAYER = 0,
-    SINGLEPLAYER = 1,
+    SINGLEPLAYER = 0,
+    LOCAL_MULTIPLAYER = 1,
 };
 
 class Game {
@@ -70,7 +70,8 @@ public:
 
     bool shouldRestart() const;
 
-    Game(Gamemode gamemode = SINGLEPLAYER);
+    Game() = default;
+
 private:
     Gamemode mode;
     Board *board;
@@ -79,6 +80,12 @@ private:
     Player *active;
     bool running = false;
     bool restart = false;
+
+    /**
+     * Reset the game
+     */
+
+    void reset();
 };
 
 

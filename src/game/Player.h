@@ -3,10 +3,12 @@
 #define TIC_TAC_TUI_PLAYER_H
 
 
+#include "../screen/ConsoleHelper.h"
+
 class Player {
 public:
 
-    [[nodiscard]] const char *getColor() const;
+    [[nodiscard]] ConsoleColor getColor() const;
 
     [[nodiscard]] const char *getCharacter() const;
 
@@ -14,10 +16,11 @@ public:
 
     [[nodiscard]] unsigned char getId() const;
 
-    Player(unsigned char id, const char * color, const char * character, bool outlined);
+    Player(unsigned char id, ConsoleColor color, const char * character, bool outlined);
+    virtual ~Player() = default;
 private:
     unsigned char id;
-    const char * color;
+    ConsoleColor color;
     const char * character;
     bool outlined;
 };

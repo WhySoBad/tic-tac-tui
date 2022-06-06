@@ -34,6 +34,12 @@ public:
     [[nodiscard]] static unsigned short getStartLine();
 
     /**
+     * Clean the console up before exiting
+     */
+
+    static void cleanup();
+
+    /**
      * Get the next game relevant key
      * @return next game relevant key
      */

@@ -27,7 +27,7 @@ public:
      * Clean the console up
      */
 
-    static void cleanUp();
+    static void cleanup();
 
     /**
      * Get the console handle

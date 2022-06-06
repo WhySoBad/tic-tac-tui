@@ -1,6 +1,6 @@
 #include "Player.h"
 
-const char *Player::getColor() const {
+ConsoleColor Player::getColor() const {
     return color;
 }
 
@@ -17,7 +17,7 @@ unsigned char Player::getId() const {
     return id;
 }
 
-Player::Player(unsigned char id, const char *color, const char *character, bool outlined) {
+Player::Player(unsigned char id, ConsoleColor color, const char *character, bool outlined) {
     this->id = id;
     this->color = color;
     this->character = character;

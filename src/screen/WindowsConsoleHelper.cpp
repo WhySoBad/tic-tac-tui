@@ -27,11 +27,13 @@ void WindowsConsoleHelper::initialize() {
         return;
     }
 
-    POINT point;
-    if(GetCursorPos(&point)) startLine = point.y + 1;
+    CONSOLE_SCREEN_BUFFER_INFO info;
+    if(GetConsoleScreenBufferInfo(handle, &info)) {
+        startLine = info.dwCursorPosition.Y;
+    } else startLine = 0;
 }
 
-void WindowsConsoleHelper::cleanUp() {
+void WindowsConsoleHelper::cleanup() {
     if(!SetConsoleMode(handle, mode)) {
         fprintf(stderr, "Failed to restore initial console mode");
     }

@@ -69,16 +69,24 @@ public:
      * Select a field
      * @param id id of the field
      * @param color color of the selection
+     * @param single boolean whether single selection is enabled [and therefore the old selection gets cleared]
      */
 
-    void selectField(int id, const char * color = COLOR_RESET);
+    void selectField(int id, ConsoleColor color = C_RESET, bool single = true);
 
     /**
      * Get the currently selected field
-     * @return
+     * @return currently selected field
      */
 
     [[nodiscard]] int getSelected() const;
+
+    /**
+     * Get whether the board is fully filled
+     * @return boolean whether the board is filled
+     */
+
+    [[nodiscard]] bool isBoardFull() const;
 
     /**
      * Confirm a selected field
@@ -109,7 +117,7 @@ private:
      * @param color color of the fill
      */
 
-    static void fillField(int id, const char * character, bool outlined, const char * color = COLOR_RESET);
+    static void fillField(int id, const char * character, bool outlined, ConsoleColor color = C_RESET);
 
     /**
      * Select a field
@@ -117,7 +125,7 @@ private:
      * @param color color of the outline
      */
 
-    static void highlightField(int id, const char * color = COLOR_RESET);
+    static void highlightField(int id, ConsoleColor color = C_RESET);
 };
 
 
