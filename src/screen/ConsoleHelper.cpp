@@ -61,8 +61,12 @@ void ConsoleHelper::drawEmptyBoard() {
                 else ConsoleHelper::print(CROSSING_BORDER);
             } else ConsoleHelper::print(HORIZONTAL_BORDER);
         }
-
+#ifdef __linux__
+        printf("\n");
+#endif
+#ifdef _WIN32
         ConsoleHelper::moveCursor(0, cursorY + 1);
+#endif
     };
     
     auto line = []() {
@@ -70,7 +74,12 @@ void ConsoleHelper::drawEmptyBoard() {
             if(i % (CELL_WIDTH + 1) == 0) ConsoleHelper::print(VERTICAL_BORDER);
             else ConsoleHelper::print(" ");
         }
+#ifdef __linux__
+        printf("\n");
+#endif
+#ifdef _WIN32
         ConsoleHelper::moveCursor(0, cursorY + 1);
+#endif
     };
 
 
@@ -81,6 +90,8 @@ void ConsoleHelper::drawEmptyBoard() {
             else horizontalLine();
         } else line();
     }
+
+    fflush(stdout);
 }
 
 void ConsoleHelper::initialize() {

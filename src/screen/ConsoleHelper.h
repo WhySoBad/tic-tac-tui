@@ -91,6 +91,7 @@ enum GameKey {
 };
 
 class ConsoleHelper {
+    static inline unsigned int cursorY = 0;
 public:
     /**
      * Clear the terminal
@@ -181,8 +182,6 @@ public:
      */
 
     void initialize();
-private:
-    static inline unsigned int cursorY = 0;
 };
 
 

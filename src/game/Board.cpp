@@ -105,7 +105,6 @@ unsigned char Board::getWinner() const {
 
 void Board::drawBoard() {
     ConsoleHelper::drawEmptyBoard();
-    fflush(stdout);
 }
 
 void Board::fillField(int id, const char *character, bool outlined, ConsoleColor color) {

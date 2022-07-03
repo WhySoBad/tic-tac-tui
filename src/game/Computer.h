@@ -7,6 +7,7 @@
 #define COMPUTER_MOVE_SPEED     150
 
 class Computer: public Player {
+    Board *board;
 public:
 
     /**
@@ -16,9 +17,6 @@ public:
     void pickField();
 
     Computer(Board *board, unsigned char id, ConsoleColor color, const char *character, bool outlined);
-
-private:
-    Board *board;
 };
 
 

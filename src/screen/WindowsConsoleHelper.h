@@ -15,6 +15,9 @@ enum WinGameKey {
 };
 
 class WindowsConsoleHelper {
+    static inline unsigned short startLine = 0;
+    inline static HANDLE handle;
+    inline static DWORD mode;
 public:
 
     /**
@@ -51,15 +54,18 @@ public:
     [[nodiscard]] static unsigned short getStartLine();
 
     /**
+     * Set a new start line of the terminal
+     * @param line new start line of the terminal
+     */
+
+    static void setStartLine(unsigned short line);
+
+    /**
     * Get the next game relevant key
     * @return next game relevant key
     */
 
     [[nodiscard]] static WinGameKey getKey();
-private:
-    static inline unsigned short startLine = 0;
-    inline static HANDLE handle;
-    inline static DWORD mode;
 };
 
 

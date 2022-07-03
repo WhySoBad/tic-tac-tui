@@ -37,9 +37,10 @@ void Game::start() {
                     case DOWN: { if((int) (selected / ROWS < (ROWS - 1))) board->selectField(selected + COLUMNS, active->getColor()); break; };
                     case LEFT: { if(selected % COLUMNS > 0) board->selectField(selected - 1, active->getColor()); break; }
                     case RIGHT: { if(selected % COLUMNS < (COLUMNS - 1)) board->selectField(selected + 1, active->getColor()); break; };
-                    case ENTER: { if(selected >= 0) board->confirmSelection(active); fixed = true; break; };
+                    case ENTER: { if(selected >= 0 && board->getFieldOwner(selected) == UNOCCUPIED) board->confirmSelection(active); fixed = true; break; };
                 }
-                if(fixed && board->getWinner() != UNOCCUPIED) {
+                if(board->getWinner() != UNOCCUPIED) {
+                    fixed = true;
                     board->selectField(-1);
                     running = false;
                 } else if(board->isBoardFull()) {
@@ -85,11 +86,6 @@ Player *Game::getActive() const {
 
 bool Game::isRunning() const {
     return running;
-}
-
-void Game::stop(bool restart) {
-    this->restart = restart;
-    running = false;
 }
 
 bool Game::shouldRestart() const {

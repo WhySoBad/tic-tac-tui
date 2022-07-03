@@ -11,6 +11,20 @@ enum Gamemode {
 };
 
 class Game {
+    Gamemode mode;
+    Board *board;
+    Player *player1;
+    Player *player2;
+    Player *active;
+    bool running = false;
+    bool restart = false;
+
+    /**
+     * Reset the game
+     */
+
+    void reset();
+
 public:
     void start();
 
@@ -57,13 +71,6 @@ public:
     [[nodiscard]] bool isRunning() const;
 
     /**
-     * Stop the game
-     * @param restart boolean whether a new round should be started
-     */
-
-    void stop(bool restart = true);
-
-    /**
      * Get whether a new round should be started after the game was stopped
      * @return boolean whether a new round should be started after the game was stopped
      */
@@ -71,21 +78,6 @@ public:
     bool shouldRestart() const;
 
     Game() = default;
-
-private:
-    Gamemode mode;
-    Board *board;
-    Player *player1;
-    Player *player2;
-    Player *active;
-    bool running = false;
-    bool restart = false;
-
-    /**
-     * Reset the game
-     */
-
-    void reset();
 };
 
 

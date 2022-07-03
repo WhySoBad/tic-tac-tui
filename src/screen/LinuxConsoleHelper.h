@@ -18,6 +18,7 @@ struct Position {
 };
 
 class LinuxConsoleHelper {
+    static inline unsigned short startLine = 0;
 public:
     /**
      * Get the current cursor position in the terminal
@@ -32,6 +33,13 @@ public:
      */
 
     [[nodiscard]] static unsigned short getStartLine();
+
+    /**
+     * Set the start line of the terminal
+     * @param line new start line
+     */
+
+    static void setStartLine(unsigned short line);
 
     /**
      * Clean the console up before exiting
@@ -51,8 +59,6 @@ public:
      */
 
     static void initialize();
-private:
-    static inline unsigned short startLine = 0;
 };
 
 

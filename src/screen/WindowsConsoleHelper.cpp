@@ -79,6 +79,10 @@ unsigned short WindowsConsoleHelper::getStartLine() {
     return startLine;
 }
 
+void WindowsConsoleHelper::setStartLine(unsigned short line) {
+    startLine = line;
+}
+
 
 #endif
 

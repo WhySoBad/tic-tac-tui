@@ -48,6 +48,10 @@ unsigned short LinuxConsoleHelper::getStartLine() {
 
 void LinuxConsoleHelper::initialize() {
     startLine = LinuxConsoleHelper::getCursorPosition().y;
+    struct termios term{};
+    tcgetattr(0, &term);
+    term.c_lflag &= ~ECHO;
+    if(tcsetattr(0, TCSANOW, &term) < 0) fprintf(stderr, "tcsetattr: error whilst disabling echo");
 }
 
 LinuxGameKey LinuxConsoleHelper::getKey() {
@@ -83,6 +87,10 @@ void LinuxConsoleHelper::cleanup() {
     term.c_cc[VMIN] = 1;
     term.c_cc[VTIME] = 0;
     tcsetattr(0, TCSADRAIN, &term);
+}
+
+void LinuxConsoleHelper::setStartLine(unsigned short line) {
+    startLine = line;
 }
 
 #endif

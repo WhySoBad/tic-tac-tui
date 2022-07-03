@@ -20,6 +20,35 @@
 #define BOARD_WIDTH     COLUMNS + 1 + CELL_WIDTH * COLUMNS
 
 class Board {
+    std::array<unsigned char, ROWS * COLUMNS> fields{};
+    unsigned char winner = 2; // no winner
+    int selected = -1;
+
+    /**
+     * Check whether the game has a winner
+     * @return id of the winner [2 = no winner]
+     */
+
+    [[nodiscard]] unsigned char checkForWinner();
+
+    /**
+     * Fill a field
+     * @param id id of the field
+     * @param character character to fill the field with
+     * @param outlined boolean whether the field should be outlined
+     * @param color color of the fill
+     */
+
+    static void fillField(int id, const char * character, bool outlined, ConsoleColor color = C_RESET);
+
+    /**
+     * Select a field
+     * @param id id of the field
+     * @param color color of the outline
+     */
+
+    static void highlightField(int id, ConsoleColor color = C_RESET);
+
 public:
     /**
      * Get all fields
@@ -96,36 +125,6 @@ public:
     void confirmSelection(Player *player);
 
     Board();
-
-private:
-    std::array<unsigned char, ROWS * COLUMNS> fields{};
-    unsigned char winner = 2; // no winner
-    int selected = -1;
-
-    /**
-     * Check whether the game has a winner
-     * @return id of the winner [2 = no winner]
-     */
-
-    [[nodiscard]] unsigned char checkForWinner();
-
-    /**
-     * Fill a field
-     * @param id id of the field
-     * @param character character to fill the field with
-     * @param outlined boolean whether the field should be outlined
-     * @param color color of the fill
-     */
-
-    static void fillField(int id, const char * character, bool outlined, ConsoleColor color = C_RESET);
-
-    /**
-     * Select a field
-     * @param id id of the field
-     * @param color color of the outline
-     */
-
-    static void highlightField(int id, ConsoleColor color = C_RESET);
 };
 
 
