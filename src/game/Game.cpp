@@ -3,6 +3,11 @@
 #include "random"
 #include "Computer.h"
 
+#ifdef __linux__
+#include "termios.h"
+#include "unistd.h"
+#endif
+
 inline std::mt19937 &generator() {
     static thread_local std::mt19937 gen(std::random_device{}());
     return gen;
@@ -25,6 +30,9 @@ void Game::start() {
                 running = false;
             }
             fflush(stdout);
+#ifdef __linux__
+            tcflush(STDIN_FILENO,TCIFLUSH);
+#endif
         } else {
             bool fixed = false;
             do {
