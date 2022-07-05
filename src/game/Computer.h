@@ -4,7 +4,7 @@
 #include "Player.h"
 #include "Board.h"
 
-#define COMPUTER_MOVE_SPEED     1500
+#define COMPUTER_MOVE_SPEED     150
 
 class Computer: public Player {
     Board *board;

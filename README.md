@@ -2,7 +2,7 @@
 
 ```
 ┏━0━━━━━┳━1━━━━━┳━2━━━━━┓       > Play tic-tac-toe in the terminal
-┃ ***** ┃ ##### ┃ ##### ┃         regardless whether on linux or windows
+┃ ***** ┃ ##### ┃ ##### ┃         regardless whether you're on linux or windows
 ┃ *   * ┃ ##### ┃ ##### ┃
 ┃ ***** ┃ ##### ┃ ##### ┃       > Play tic-tac-toe in a singleplayer
 ┣━3━━━━━╋━4━━━━━╋━5━━━━━┫         mode against a bot
