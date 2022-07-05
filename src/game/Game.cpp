@@ -7,6 +7,9 @@
 #include "termios.h"
 #include "unistd.h"
 #endif
+#ifdef _WIN32
+#include "conio.h"
+#endif
 
 inline std::mt19937 &generator() {
     static thread_local std::mt19937 gen(std::random_device{}());
@@ -33,6 +36,9 @@ void Game::start() {
 #ifdef __linux__
             tcflush(STDIN_FILENO,TCIFLUSH);
 #endif
+#ifdef _WIN32
+            while(kbhit()) getch();
+#endif
         } else {
             bool fixed = false;
             do {
@@ -45,7 +51,7 @@ void Game::start() {
                     case DOWN: { if((int) (selected / ROWS < (ROWS - 1))) board->selectField(selected + COLUMNS, active->getColor()); break; };
                     case LEFT: { if(selected % COLUMNS > 0) board->selectField(selected - 1, active->getColor()); break; }
                     case RIGHT: { if(selected % COLUMNS < (COLUMNS - 1)) board->selectField(selected + 1, active->getColor()); break; };
-                    case ENTER: { if(selected >= 0 && board->getFieldOwner(selected) == UNOCCUPIED) board->confirmSelection(active); fixed = true; break; };
+                    case ENTER: { if(board->getFieldOwner(selected) == UNOCCUPIED) { board->confirmSelection(active); fixed = true; } break; };
                 }
                 if(board->getWinner() != UNOCCUPIED) {
                     fixed = true;
